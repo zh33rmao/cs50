@@ -57,11 +57,11 @@ def result(board, action):
     """
     Returns the board that results from making move (i, j) on the board.
     """
-    if board[action[0], action[1]] != EMPTY:
+    if board[action[0]][action[1]] != EMPTY:
         raise Exception("Invalid action!!!")
     
     new_board = copy.deepcopy(board)
-    board[action[0], action[1]] == player(board)
+    board[action[0]][action[1]] == player(board)
     return new_board
 
     raise NotImplementedError
@@ -134,34 +134,36 @@ def minimax(board):
     """
     Returns the optimal action for the current player on the board.
     """
-    if ternimal(board):
+    if terminal(board):
         return None
     # who play?
     if player(board) == O:
         (action, v) = min_value(board)
+        return action
     if player(board) == X:
         (action, v) = max_value(board)
+        return action 
     raise NotImplementedError
 
 
 def max_value(board):
-    if ternimal(board):
+    if terminal(board):
         return utility(board)
     v = float('-inf')
     act = (3,3)
     for action in actions(board):
-        if v < min_value(result(board, action)):
+        if v > (min_value(result(board, action)))[1]:
             act = action
-            v = min_value(result(board, action))
+            v = (min_value(result(board, action)))[1]
     return (act, v)
 
 def min_value(board):
-    if ternimal(board):
+    if terminal(board):
         return utility(board)
     v = float('inf')
     act = (3,3)
     for action in actions(board):
-        if v > max_value(result(board, action)):
+        if v < (max_value(result(board, action)))[1]:
             act = action
-            v = max_value(result(board, action))
+            v = (max_value(result(board, action)))[1]
     return (act, v)
