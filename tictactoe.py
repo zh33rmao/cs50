@@ -135,14 +135,33 @@ def minimax(board):
     Returns the optimal action for the current player on the board.
     """
     if ternimal(board):
-        return utility(board)
+        return None
     # who play?
     if player(board) == O:
-        acts = actions(board)
-        for act in acts:  
-            minimax(result(board, act))
+        (action, v) = min_value(board)
     if player(board) == X:
-        acts = actions(board)
-        for act in acts:  
-            minimax(result(board, act))
+        (action, v) = max_value(board)
     raise NotImplementedError
+
+
+def max_value(board):
+    if ternimal(board):
+        return utility(board)
+    v = float('-inf')
+    act = (3,3)
+    for action in actions(board):
+        if v < min_value(result(board, action)):
+            act = action
+            v = min_value(result(board, action))
+    return (act, v)
+
+def min_value(board):
+    if ternimal(board):
+        return utility(board)
+    v = float('inf')
+    act = (3,3)
+    for action in actions(board):
+        if v > max_value(result(board, action)):
+            act = action
+            v = max_value(result(board, action))
+    return (act, v)
